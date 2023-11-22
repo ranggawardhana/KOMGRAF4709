@@ -1,0 +1,56 @@
+#include <iostream>
+
+// Fungsi untuk melakukan translasi
+void translasi(float matriks[3][3], float tx, float ty) {
+    // Matriks translasi
+    float translasi_matrix[3][3] = {
+        {1, 0, tx},
+        {0, 1, ty},
+        {0, 0, 1}
+    };
+
+    // Melakukan operasi translasi
+    float hasil[3][3] = {0};
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                hasil[i][j] += matriks[i][k] * translasi_matrix[k][j];
+            }
+        }
+    }
+
+    // Menampilkan hasil
+    std::cout << "Matriks Awal:\n";
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            std::cout << matriks[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+
+    std::cout << "\nMatriks Hasil Translasi:\n";
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            std::cout << hasil[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+int main() {
+    // Contoh matriks awal 3x3
+    float matriks_awal[3][3] = {
+        {1, 0, 2},
+        {0, 1, 3},
+        {0, 0, 1}
+    };
+
+    // Nilai translasi tx dan ty
+    float tx = 3;
+    float ty = 1;
+
+    // Melakukan translasi
+    translasi(matriks_awal, tx, ty);
+
+    return 0;
+}

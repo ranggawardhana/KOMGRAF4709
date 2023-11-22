@@ -1,0 +1,56 @@
+#include <iostream>
+
+// Fungsi untuk melakukan transformasi skala
+void skala(float matriks[3][3], float sx, float sy) {
+    // Matriks transformasi skala
+    float skala_matrix[3][3] = {
+        {sx, 0, 0},
+        {0, sy, 0},
+        {0, 0, 1}
+    };
+
+    // Melakukan operasi transformasi skala
+    float hasil[3][3] = {0};
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                hasil[i][j] += matriks[i][k] * skala_matrix[k][j];
+            }
+        }
+    }
+
+    // Menampilkan hasil
+    std::cout << "Matriks Awal:\n";
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            std::cout << matriks[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+
+    std::cout << "\nMatriks Hasil Transformasi Skala:\n";
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            std::cout << hasil[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+int main() {
+    // Contoh matriks awal 3x3
+    float matriks_awal[3][3] = {
+        {2, 0, 0},
+        {0, 3, 0},
+        {0, 0, 0}
+    };
+
+    // Nilai skala sx dan sy
+    float sx = 3;
+    float sy = 1;
+
+    // Melakukan transformasi skala
+    skala(matriks_awal, sx, sy);
+
+    return 0;
+}
