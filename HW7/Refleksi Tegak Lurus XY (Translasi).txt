@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+
+// Fungsi untuk melakukan transformasi refleksi terhadap sumbu XY
+void reflectXY(std::vector<std::vector<double>>& matrix, int size) {
+    for (int i = 0; i < size; ++i) {
+        // Mengubah tanda baik pada koordinat x maupun y pada setiap titik
+        matrix[i][0] = -matrix[i][0];
+        matrix[i][1] = -matrix[i][1];
+    }
+}
+
+// Fungsi untuk melakukan transformasi translasi
+void translate(std::vector<std::vector<double>>& matrix, int size, double tx, double ty) {
+    for (int i = 0; i < size; ++i) {
+        matrix[i][0] += tx;
+        matrix[i][1] += ty;
+    }
+}
+
+// Fungsi untuk menampilkan matriks
+void displayMatrix(const std::vector<std::vector<double>>& matrix, int size) {
+    std::cout << "Matriks setelah transformasi:\n";
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < 2; ++j) {
+            std::cout << matrix[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+int main() {
+    // Input ukuran matriks (jumlah titik)
+    int size;
+    std::cout << "Masukkan ukuran matriks (jumlah titik): ";
+    std::cin >> size;
+
+    // Input matriks (koordinat titik-titik)
+    std::vector<std::vector<double>> matrix(size, std::vector<double>(2, 0.0));
+    std::cout << "Masukkan koordinat titik-titik(contoh : 3 4):\n";
+    for (int i = 0; i < size; ++i) {
+        std::cout << "Titik " << i + 1 << ": ";
+        std::cin >> matrix[i][0] >> matrix[i][1];
+    }
+
+    // Menampilkan matriks sebelum transformasi
+    std::cout << "Matriks sebelum transformasi:\n";
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < 2; ++j) {
+            std::cout << matrix[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    // Melakukan transformasi refleksi terhadap sumbu XY
+    reflectXY(matrix, size);
+
+    // Melakukan transformasi translasi
+    double tx, ty;
+    std::cout << "Masukkan nilai translasi tx dan ty (contoh : 1 5): ";
+    std::cin >> tx >> ty;
+    translate(matrix, size, tx, ty);
+
+    // Menampilkan matriks setelah transformasi
+    displayMatrix(matrix, size);
+
+    return 0;
+}
