@@ -1,0 +1,122 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+
+// Definisi titik dalam ruang 3D
+struct Point {
+    double x, y, z;
+
+    Point(double x, double y, double z) : x(x), y(y), z(z) {}
+};
+
+// Definisi matriks transformasi 4x4
+struct Matrix4x4 {
+    double m[4][4];
+
+    Matrix4x4() {
+        // Inisialisasi matriks identitas
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                m[i][j] = (i == j) ? 1.0 : 0.0;
+            }
+        }
+    }
+};
+
+// Fungsi untuk mengalikan dua matriks 4x4
+Matrix4x4 multiplyMatrices(const Matrix4x4& A, const Matrix4x4& B) {
+    Matrix4x4 result;
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            result.m[i][j] = 0;
+            for (int k = 0; k < 4; ++k) {
+                result.m[i][j] += A.m[i][k] * B.m[k][j];
+            }
+        }
+    }
+    return result;
+}
+
+// Fungsi untuk mentranslasikan objek dalam ruang 3D
+Matrix4x4 translate(double tx, double ty, double tz) {
+    Matrix4x4 translationMatrix;
+    translationMatrix.m[0][3] = tx;
+    translationMatrix.m[1][3] = ty;
+    translationMatrix.m[2][3] = tz;
+    return translationMatrix;
+}
+
+// Fungsi untuk merotasi objek dalam ruang 3D
+Matrix4x4 rotateX(double angle) {
+    Matrix4x4 rotationMatrix;
+    double radian = angle * M_PI / 180.0;
+    rotationMatrix.m[1][1] = cos(radian);
+    rotationMatrix.m[1][2] = -sin(radian);
+    rotationMatrix.m[2][1] = sin(radian);
+    rotationMatrix.m[2][2] = cos(radian);
+    return rotationMatrix;
+}
+
+Matrix4x4 rotateY(double angle) {
+    Matrix4x4 rotationMatrix;
+    double radian = angle * M_PI / 180.0;
+    rotationMatrix.m[0][0] = cos(radian);
+    rotationMatrix.m[0][2] = sin(radian);
+    rotationMatrix.m[2][0] = -sin(radian);
+    rotationMatrix.m[2][2] = cos(radian);
+    return rotationMatrix;
+}
+
+Matrix4x4 rotateZ(double angle) {
+    Matrix4x4 rotationMatrix;
+    double radian = angle * M_PI / 180.0;
+    rotationMatrix.m[0][0] = cos(radian);
+    rotationMatrix.m[0][1] = -sin(radian);
+    rotationMatrix.m[1][0] = sin(radian);
+    rotationMatrix.m[1][1] = cos(radian);
+    return rotationMatrix;
+}
+
+// Fungsi untuk merubah skala objek dalam ruang 3D
+Matrix4x4 scale(double sx, double sy, double sz) {
+    Matrix4x4 scaleMatrix;
+    scaleMatrix.m[0][0] = sx;
+    scaleMatrix.m[1][1] = sy;
+    scaleMatrix.m[2][2] = sz;
+    return scaleMatrix;
+}
+
+// Fungsi untuk mentransformasi titik dalam ruang 3D
+Point transformPoint(const Matrix4x4& transformationMatrix, const Point& point) {
+    double x = transformationMatrix.m[0][0] * point.x + transformationMatrix.m[0][1] * point.y +
+               transformationMatrix.m[0][2] * point.z + transformationMatrix.m[0][3];
+    double y = transformationMatrix.m[1][0] * point.x + transformationMatrix.m[1][1] * point.y +
+               transformationMatrix.m[1][2] * point.z + transformationMatrix.m[1][3];
+    double z = transformationMatrix.m[2][0] * point.x + transformationMatrix.m[2][1] * point.y +
+               transformationMatrix.m[2][2] * point.z + transformationMatrix.m[2][3];
+
+    return Point(x, y, z);
+}
+
+int main() {
+    // Contoh penggunaan transformasi
+    Point originalPoint(1.0, 2.0, 3.0);
+    std::cout << "Original Point: (" << originalPoint.x << ", " << originalPoint.y << ", " << originalPoint.z << ")\n";
+
+    // Translasi
+    Matrix4x4 translationMatrix = translate(1.0, 2.0, 3.0);
+    Point translatedPoint = transformPoint(translationMatrix, originalPoint);
+    std::cout << "Translated Point: (" << translatedPoint.x << ", " << translatedPoint.y << ", " << translatedPoint.z << ")\n";
+
+    // Rotasi
+    Matrix4x4 rotationMatrix = rotateY(45.0);
+    Point rotatedPoint = transformPoint(rotationMatrix, originalPoint);
+    std::cout << "Rotated Point: (" << rotatedPoint.x << ", " << rotatedPoint.y << ", " << rotatedPoint.z << ")\n";
+
+    // Skala
+    Matrix4x4 scaleMatrix = scale(2.0, 0.5, 1.5);
+    Point scaledPoint = transformPoint(scaleMatrix, originalPoint);
+    std::cout << "Scaled Point: (" << scaledPoint.x << ", " << scaledPoint.y << ", " << scaledPoint.z << ")\n";
+
+    return 0;
+}
